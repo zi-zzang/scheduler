@@ -1,0 +1,43 @@
+.box{
+    width:820px;
+}
+.form-box{
+    text-align:left;
+    gap:0;
+}
+.duplicate-id{
+    position:relative;
+}
+#duplicate-button{
+    position:absolute;
+    border: none;
+    background-color: #1877f2;
+    color:#fff;
+    border-radius: 10px;
+    height:30px;
+    padding:0 10px;
+    /* margin-left:10px; */
+    top:7px;
+    right:5px;
+}
+.exception{
+    font-size:12px;
+}
+.sub-title{
+    margin-top: 20px;
+    color:#C5C7CB;
+}
+
+.incorrect{
+    display: none;
+    color:#FF5353;
+}
+
+.correct{
+    display: none;
+    color:#1877f2;
+}
+
+#submit{
+    margin-top:20px;
+}

@@ -18,3 +18,43 @@ Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/web","s
 //데이터베이스 주소 mysql 포트는 3306
 
 %>
+
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+    <link rel="stylesheet" href="/scheduler/css/index.css">
+    <link rel="stylesheet" href="/scheduler/css/signUp.css">
+</head>
+<body>
+    <div id="wrap">
+        <div class="box">
+            <main>
+                <h1 class="title">아이디 찾기</h1>
+                <form action="findIdAction.jsp" class="form-box">
+                    <p class="sub-title">아이디</p>
+                    <div class="duplicate-id">                    
+                        <input type="text" name="name" placeholder="사용할 아이디를 입력해 주세요." id="name" class="input-box" maxlength="20">
+                        <input type="button" value="중복확인" class="buttons" id="duplicate-button">
+                    </div>
+                    <p class="exception incorrect">영문 소문자, 숫자, 특수문자 제외 20자 이하로만 입력해 주세요.</p>
+                    <p class="sub-title">비밀번호</p>
+                    <input type="text" name="pw" placeholder="사용할 비밀번호를 입력해 주세요." id="pw" class="input-box" maxlength="20">
+                    <p class="exception incorrect">영문 대/소문자 구별, 숫자, 특수문자 포함 20자 이하로만 입력해 주세요.</p>
+                    <p class="exception correct">사용 가능한 비밀번호입니다.</p>
+                    <p class="sub-title">이름</p>
+                    <input type="text" name="name" placeholder="이름을 입력해 주세요." id="name" class="input-box" maxlength="20">
+                    <p class="sub-title">전화번호</p>                
+                    <input type="text" name="phone_number" placeholder="전화번호를 입력해 주세요. (- 제외)" id="phone_number" class="input-box" maxlength="11">
+                    <p class="sub-title">직급</p>
+                    <input type="text" name="position" placeholder="직급을 입력해 주세요." id="position" class="input-box">
+                    <input type="submit"  value="회원가입" id="submit" class="input-box buttons">
+                </form>
+            </main>
+        </div>
+     </div>
+</body>
+</html>

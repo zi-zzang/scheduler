@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="kr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>스케쥴러스 - 로그인</title>
+    <link rel="stylesheet" href="/scheduler/css/index.css">
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+    <!-- <div class="black-bg">
+        <div class="modal">
+            <p>아이디 또는 비밀번호를 잘못 입력했습니다.</p>
+            <input type="button" value="확인">
+        </div>
+    </div> -->
+     <div id="wrap">
+        <div class="box">
+            <main>
+                <h1><img src="/scheduler/img/logo.png" alt="schedulerus" id="logo"></h1>
+                <!-- <h1><img src="/img/logo.png" alt="schedulerus" id="logo"></h1> -->
+                <form action="loginAction.jsp" class="form-box">
+                    <input type="text" name="id" placeholder="아이디" id="login_id" class="input-box">
+                    <input type="password" name="pw" placeholder="비밀번호" id="login_pw" class="input-box">
+                    <input type="submit"  value="로그인" id="submit" class="input-box buttons">
+                </form>
+                <div class="login-box">
+                    <div class="find-box">
+                        <p><a href="findId.html">아이디 찾기</a>/</p>
+                        <p><a href="findPw.html">비밀번호 찾기</a></p>
+                    </div>
+                    <p><a href="signUp.jsp">회원가입</a></p>
+                </div>
+            </main>
+        </div>
+     </div>
+</body>
+</html>

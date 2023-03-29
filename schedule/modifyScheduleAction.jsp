@@ -14,7 +14,7 @@ request.setCharacterEncoding("utf-8");
 Class.forName("com.mysql.jdbc.Driver"); 
 
 //내가 연결할 데이터베이스의 주소
-Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/web","stageus","1234") ;
+Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/scheduler","stageus","1234") ;
 //데이터베이스 주소 mysql 포트는 3306
 
 %>

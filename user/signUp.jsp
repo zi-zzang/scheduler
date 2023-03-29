@@ -14,7 +14,7 @@ request.setCharacterEncoding("utf-8");
 Class.forName("com.mysql.jdbc.Driver"); 
 
 //내가 연결할 데이터베이스의 주소
-Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/web","stageus","1234") ;
+Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/scheduler","stageus","1234") ;
 //데이터베이스 주소 mysql 포트는 3306
 
 %>
@@ -24,7 +24,7 @@ Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/web","s
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" />
     <title>회원가입</title>
     <link rel="stylesheet" href="/scheduler/css/index.css">
     <link rel="stylesheet" href="/scheduler/css/signUp.css">
@@ -33,11 +33,11 @@ Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/web","s
     <div id="wrap">
         <div class="box">
             <main>
-                <h1 class="title">아이디 찾기</h1>
-                <form action="findIdAction.jsp" class="form-box">
+                <h1 class="title">회원가입</h1>
+                <form action="signUpAction.jsp" class="form-box">
                     <p class="sub-title">아이디</p>
                     <div class="duplicate-id">                    
-                        <input type="text" name="name" placeholder="사용할 아이디를 입력해 주세요." id="name" class="input-box" maxlength="20">
+                        <input type="text" name="id" placeholder="사용할 아이디를 입력해 주세요." id="id" class="input-box" maxlength="20">
                         <input type="button" value="중복확인" class="buttons" id="duplicate-button">
                     </div>
                     <p class="exception incorrect">영문 소문자, 숫자, 특수문자 제외 20자 이하로만 입력해 주세요.</p>

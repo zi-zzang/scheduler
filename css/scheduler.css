@@ -1,16 +1,31 @@
+#add-modal{
+    width:700px;
+}
+#modify-modal{
+    width: 287px;
+    text-align:center;
+}
+#delete-modal{
+    width:287px;
+    text-align: center;
+}
 #wrap{
-    display:block;
-    position: relative;
+    display:inline-block;
+    height:100%;
 }
 .box{
     width:80%;
-    margin-bottom: 25px;
+    margin: 60px auto;
     display: block;
     padding:20px;
 }
 .navbar{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    width:100%;
+    background-color: #fff;
 }
 .material-symbols-rounded {
     font-size: 30px !important;
@@ -28,7 +43,10 @@
     color:#1877F2;
     font-size:22px;
     font-weight: bold;
+}
 
+.date-time{
+    margin-top: 5px;
 }
 .schedule-box{
     display: flex;
@@ -37,12 +55,43 @@
 }
 .schedule-content{
     display: flex;
-
+    align-items:center;
 }
+
 .schedule-item{
     margin-right:5px;
     font-size:20px;
+    text-align:left;
 }
+.menu-bar{
+    width: 30%;
+    height: 100%;
+    background-color: #fff;
+    /* display: none; */
+    left: -61%;
+    text-align:right;
+    padding: 20px;
+    color:#1877F2;
+    margin-top:58px;
+    position: fixed;
+    background-color: #fff;
+}
+
+.menu-content{
+    text-align: center;
+}
+.greeting-message{
+    margin:25px 0;
+}
+.all-schedules{
+    text-align:left;
+    padding: 16px;
+}
+.schedule{
+    font-weight: bold;
+    margin-top: 15px;
+}
+
 .line{
     display: block;
     width:100%;
@@ -50,44 +99,63 @@
     background-color:#1877F2;
     margin:5px 0;
 }
+.member{
+    display:none;
+}
+.member-schedule{
+    display:block;
+    font-weight: normal;
+    margin: 10px 20px;
+}
+
 .buttons{
     font-size:14px;
-    margin-left:16px;
+    margin:0 8px;
     border: none;
     border-radius: 10px;
     background-color: #1877F2;
     color:#fff;
     padding:5px 10px;
+    width:60px;
+    height:30px;
 }
-.modal{
-    width: 800px;
-    height: 200px;
-    top: 40%;
-    left: 28%;
-}
-.modal > *{
-    margin-bottom:15px;
-}
-.modal-content{
-    display: flex;
-}
+
 .text-input{
-    width: 80%;
-    margin-right: 30px;
+    width: 75%;
     border:1px solid #1877F2;
     border-radius: 10px;
     padding-left:5px;
+    height:29px;
+    margin-top: 5px;
 }
 
-.menu-bar{
-    width: 30%;
-    height: 100%;
-    position: absolute;
-    background: #fff;
-    /* display: none; */
-    /* left: -30%; */
-    transition: transform translateX(-30%) 2s ease-out;
+
+
+#logout{
+    width:fit-content;
 }
+
 .show{
     display:block;
+}
+
+@media (max-width: 1000px) {
+    .schedule-item{
+        font-size: 16px;
+    }
+    .text-input{
+        
+        width:53%;
+        
+    }
+    .buttons{
+        margin-left: 3px;
+    }
+
+    .box{
+        padding:11px;
+    }
+    .menu-bar{
+        width:50%;
+    }
 }

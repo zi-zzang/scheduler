@@ -40,11 +40,11 @@ Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/schedul
                         <input type="text" name="id" placeholder="사용할 아이디를 입력해 주세요." id="id" class="input-box" maxlength="20">
                         <input type="button" value="중복확인" class="buttons" id="duplicate-button">
                     </div>
-                    <p class="exception incorrect">영문 소문자, 숫자, 특수문자 제외 20자 이하로만 입력해 주세요.</p>
+                    <p class="exception incorrect" id="id-incorrect">영문 소문자, 숫자, 특수문자 제외 20자 이하로만 입력해 주세요.</p>
                     <p class="sub-title">비밀번호</p>
-                    <input type="text" name="pw" placeholder="사용할 비밀번호를 입력해 주세요." id="pw" class="input-box" maxlength="20">
-                    <p class="exception incorrect">영문 대/소문자 구별, 숫자, 특수문자 포함 20자 이하로만 입력해 주세요.</p>
-                    <p class="exception correct">사용 가능한 비밀번호입니다.</p>
+                    <input type="password" name="pw" placeholder="사용할 비밀번호를 입력해 주세요." id="pw" class="input-box" maxlength="20">
+                    <p class="exception incorrect" id="pw-incorrect">영문 대/소문자 구별, 숫자, 특수문자 포함 3자 이상 20자 이하로만 입력해 주세요.</p>
+                    <p class="exception correct" id="pw-correct">사용 가능한 비밀번호입니다.</p>
                     <p class="sub-title">이름</p>
                     <input type="text" name="name" placeholder="이름을 입력해 주세요." id="name" class="input-box" maxlength="20">
                     <p class="sub-title">전화번호</p>                
@@ -57,4 +57,17 @@ Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/schedul
         </div>
      </div>
 </body>
+<script>
+    var idVal = document.getElementById('id').value;
+    var pwVal = document.getElementById('pw').value;
+
+    var reg = "^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$";
+    document.getElementById('pw').addEventListener('input',function(){
+        if(!reg.test(pwVal)){
+            document.getElementById('pw-incorrect').style.display = 'block';
+        }else{
+            document.getElementById('pw-incorrect').style.display = 'none';
+        }
+    })
+</script>
 </html>

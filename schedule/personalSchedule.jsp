@@ -39,7 +39,7 @@ while(result.next()){
 }
 
 //월 마지막날 조회
-String lastDay = rs.getString(1);
+//String lastDay = rs.getString(1);
 %>
 
 
@@ -117,7 +117,7 @@ String lastDay = rs.getString(1);
                 <span class="material-symbols-rounded arrow-left">
                     arrow_back_ios_new
                 </span>      
-                <span class="month"><%=lastDay%>월</span>
+                <span class="month">3월</span>
                 <span class="material-symbols-rounded arrow-right">
                     arrow_forward_ios
                 </span>
@@ -153,17 +153,15 @@ String lastDay = rs.getString(1);
         <!-- 사이드 바 -->
 
         <!-- 일정 시작 -->
-        
-        
         <div class="box">
             <p class="date">3월 1일</p>
 
             <div class="schedule-box">
                 <div class="schedule-content">
                     <p class="schedule-item">09:00</p>
-                    <p class="schedule-item">기상하기</p>
+                    <p class="schedule-item2">기상하기</p>
                 </div>
-                <div class="schedule-content">
+                <div class="schedule-content2">
                     <button class="buttons modify" onclick="modifySchedule()">수정</button>
                     <button class="buttons delete" onclick="deleteSchedule()">삭제</button>
                 </div>
@@ -172,142 +170,14 @@ String lastDay = rs.getString(1);
             <div class="schedule-box">
                 <div class="schedule-content">
                     <p class="schedule-item">09:00</p>
-                    <p class="schedule-item">기상하기</p>
+                    <p class="schedule-item2">기상하기</p>
                 </div>
-                <div class="schedule-content">
+                <div class="schedule-content2">
                     <button class="buttons modify">수정</button>
                     <button class="buttons delete">삭제</button>
                 </div>
             </div>
             <span class="line"></span>
-        </div>
-        <div class="box">
-            <p class="date">3월 2일</p>
-            <!-- <div class="schedule-box">
-                <div class="schedule-content">
-                    <p class="schedule-item">09:00</p>
-                    <p class="schedule-item">기상하기</p>
-                </div>
-                <div class="schedule-content">
-                    <button class="buttons modify">수정</button>
-                    <button class="buttons delete">삭제</button>
-                </div>
-            </div>
-            <span class="line"></span>
-            <div class="schedule-box">
-                <div class="schedule-content">
-                    <p class="schedule-item">09:00</p>
-                    <p class="schedule-item">기상하기</p>
-                </div>
-                <div class="schedule-content">
-                    <button class="buttons modify">수정</button>
-                    <button class="buttons delete">삭제</button>
-                </div>
-            </div>
-            <span class="line"></span> -->
-        </div>
-        <div class="box">
-            <p class="date">3월 3일</p>
-            <!-- <div class="schedule-box">
-                <div class="schedule-content">
-                    <p class="schedule-item">09:00</p>
-                    <p class="schedule-item">기상하기</p>
-                </div>
-                <div class="schedule-content">
-                    <button class="buttons modify">수정</button>
-                    <button class="buttons delete">삭제</button>
-                </div>
-            </div>
-            <span class="line"></span>
-            <div class="schedule-box">
-                <div class="schedule-content">
-                    <p class="schedule-item">09:00</p>
-                    <p class="schedule-item">기상하기</p>
-                </div>
-                <div class="schedule-content">
-                    <button class="buttons modify">수정</button>
-                    <button class="buttons delete">삭제</button>
-                </div>
-            </div>
-            <span class="line"></span> -->
-        </div>
-        <div class="box">
-            <p class="date">3월 4일</p>
-        </div>
-        <div class="box">
-            <p class="date">3월 5일</p>
-            <!-- <div class="schedule-box">
-                <div class="schedule-content">
-                    <p class="schedule-item">09:00</p>
-                    <p class="schedule-item">기상하기</p>
-                </div>
-                <div class="schedule-content">
-                    <button class="buttons modify">수정</button>
-                    <button class="buttons delete">삭제</button>
-                </div>
-            </div>
-            <span class="line"></span>
-            <div class="schedule-box">
-                <div class="schedule-content">
-                    <p class="schedule-item">09:00</p>
-                    <p class="schedule-item">기상하기</p>
-                </div>
-                <div class="schedule-content">
-                    <button class="buttons modify">수정</button>
-                    <button class="buttons delete">삭제</button>
-                </div>
-            </div>
-            <span class="line"></span> -->
-        </div>
-        <div class="box">
-            <p class="date">3월 6일</p>
-            <!-- <div class="schedule-box">
-                <div class="schedule-content">
-                    <p class="schedule-item">09:00</p>
-                    <p class="schedule-item">기상하기</p>
-                </div>
-                <div class="schedule-content">
-                    <button class="buttons modify">수정</button>
-                    <button class="buttons delete">삭제</button>
-                </div>
-            </div>
-            <span class="line"></span>
-            <div class="schedule-box">
-                <div class="schedule-content">
-                    <p class="schedule-item">09:00</p>
-                    <p class="schedule-item">기상하기</p>
-                </div>
-                <div class="schedule-content">
-                    <button class="buttons modify">수정</button>
-                    <button class="buttons delete">삭제</button>
-                </div>
-            </div>
-            <span class="line"></span> -->
-        </div>
-        <div class="box">
-            <p class="date">3월 7일</p>
-            <!-- <div class="schedule-box">
-                <div class="schedule-content">
-                    <p class="schedule-item">09:00</p>
-                    <p class="schedule-item">기상하기</p>
-                </div>
-                <div class="schedule-content">
-                    <button class="buttons modify">수정</button>
-                    <button class="buttons delete">삭제</button>
-                </div>
-            </div>
-            <span class="line"></span>
-            <div class="schedule-box">
-                <div class="schedule-content">
-                    <p class="schedule-item">09:00</p>
-                    <p class="schedule-item">기상하기</p>
-                </div>
-                <div class="schedule-content">
-                    <button class="buttons modify">수정</button>
-                    <button class="buttons delete">삭제</button>
-                </div>
-            </div>
-            <span class="line"></span> -->
         </div>
         <!-- 일정 끝 -->
 

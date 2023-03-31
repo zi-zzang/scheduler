@@ -57,8 +57,18 @@
     display: flex;
     align-items:center;
 }
+.schedule-content2{
+    display: flex;
+    align-items:center;
+}
 
 .schedule-item{
+    margin-right:5px;
+    font-size:20px;
+    text-align:left;
+}
+
+.schedule-item2{
     margin-right:5px;
     font-size:20px;
     text-align:left;
@@ -137,6 +147,9 @@
 
 .show{
     display:block;
+}
+.hide{
+    visibility: 
 }
 
 @media (max-width: 1000px) {

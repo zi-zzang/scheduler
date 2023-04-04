@@ -13,19 +13,27 @@
     display:inline-block;
     height:100%;
 }
+.first-box{
+    margin-top:150px;
+}
 .box{
-    width:80%;
-    margin: 60px auto;
+    width:802px;
+    margin-bottom: 25px;
     display: block;
     padding:20px;
 }
+
 .navbar{
     display: flex;
     justify-content: space-around;
     align-items: center;
     position: fixed;
-    width:100%;
+    width:842px;
     background-color: #fff;
+    left:50%;
+    transform: translate(-50%,0);
+    border-radius: 20px;
+    top:45px;
 }
 .material-symbols-rounded {
     font-size: 30px !important;
@@ -85,6 +93,7 @@
     margin-top:58px;
     position: fixed;
     background-color: #fff;
+    top: -58px;
 }
 
 .menu-content{
@@ -149,12 +158,13 @@
     display:block;
 }
 .hide{
-    visibility: 
+    display : none; 
 }
 
+
 @media (max-width: 1000px) {
-    .schedule-item{
-        font-size: 16px;
+    .navbar{
+        width:98%;
     }
     .text-input{
         
@@ -167,6 +177,7 @@
 
     .box{
         padding:11px;
+        width:92%;
     }
     .menu-bar{
         width:50%;

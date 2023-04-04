@@ -22,9 +22,11 @@ function deleteSchedule(){
 
 function navigationMenu(){
     document.querySelector(".menu-bar").style.left = 0;
+    document.querySelector("#menu-bar").style.visibility='visible';
 }
 function closeNavigationMenu(){
     document.querySelector(".menu-bar").style.left = '-61%';
+    document.querySelector("#menu-bar").style.visibility='hidden';
 }
 
 function menuOpen(){
@@ -36,8 +38,21 @@ function menuOpen(){
 }
 
 
-// 일정 출력 (추후 Lastday 구할 예정)
-for(let i = 1; i < 32; i++){
+var choosenMonth = Number(document.querySelector('.choosen-month').textContent);
+var choosenDay = Number(document.querySelector('.choosen-day').textContent);
+console.log('현재 설정 날짜' + choosenMonth +'월'+choosenDay+'일');
+
+function setLastDay(lastDay){
+    console.log(lastDay);
+}
+
+function prevMonth(){
+    choosenMonth --;
+    document.querySelector('.choosen-month').textContent = choosenMonth;
+    console.log(choosenMonth);
+}
+
+for(let i = 1; i < choosenDay+1; i++){
 
     var box = document.createElement('div');
     var date = document.createElement('p');
@@ -62,6 +77,10 @@ for(let i = 1; i < 32; i++){
     box.appendChild(line);
 
     box.classList.add('box');
+    if(i === 1){
+        box.classList.add('first-box');
+    }
+   
     date.classList.add('date');
     scheduleBox.classList.add('schedule-box');
     scheduleContent.classList.add('schedule-content');
@@ -74,10 +93,15 @@ for(let i = 1; i < 32; i++){
     deleteButton.classList.add('delete');
     line.classList.add('line');
 
-    date.innerHTML = `3월 ${i}일`;
+    date.innerHTML = `${choosenMonth}월 ${i}일`;
     scheduleItem.innerHTML = '09:00';
     scheduleItem2.innerHTML = '기상하기';
     modifyButton.innerHTML = '수정';
     deleteButton.innerHTML = '삭제';
-    console.log(i);
 }
+
+var prevButton = document.getElementsByClassName('.arrow-left');
+var nextButton = document.getElementsByClassName('.arrow-right');
+
+
+

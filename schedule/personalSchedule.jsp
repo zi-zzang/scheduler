@@ -6,40 +6,46 @@
 <%@ page import="java.sql.PreparedStatement" %>
 <%@ page import="java.sql.ResultSet" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="java.time.LocalDate" %>
 
 <%
 //다른 페이지에서 받아온 값에 대한 인코딩 설정
 request.setCharacterEncoding("utf-8"); 
 
-// mysql 데이터 베이스를 사용하겠다
-Class.forName("com.mysql.jdbc.Driver"); 
 
-//내가 연결할 데이터베이스의 주소
-Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/scheduler","stageus","1234") ;
-//데이터베이스 주소 mysql 포트는 3306
+    // String sql = "SELECT * FROM schedule";
+    String sql = "SELECT MONTH(date) AS MONTH, DAY(date) AS DAY, LPAD(HOUR(time), 2, '0') AS HOUR, LPAD(MINUTE(time), 2, '0') AS MINUTE, content FROM schedule";
 
-// String sql = "SELECT * FROM schedule";
-String sql = "SELECT MONTH(date) AS MONTH, DAY(date) AS DAY, LPAD(HOUR(time), 2, '0') AS HOUR, LPAD(MINUTE(time), 2, '0') AS MINUTE, content FROM schedule";
-String now = "SELECT LAST_DAY(now())";
 
-// 물음표에 값을 넣게 해줌.
-//sql을 데이터베이스로 보내기 전 단계구성
-PreparedStatement query = connect.prepareStatement(sql);
-PreparedStatement nowQuery = connect.prepareStatement(now);
+    // mysql 데이터 베이스를 사용하겠다
+    Class.forName("com.mysql.jdbc.Driver"); 
 
-ResultSet result = query.executeQuery();
-ResultSet rs = nowQuery.executeQuery();
+    //내가 연결할 데이터베이스의 주소
+    Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/scheduler","stageus","1234") ;
+    //데이터베이스 주소 mysql 포트는 3306
 
-while(result.next()){
-    String month = result.getString(1);
-    String day = result.getString(2);
-    String hour = result.getString(3);
-    String minute = result.getString(4);
-    String content = result.getString(5);
-}
+    // 물음표에 값을 넣게 해줌.
+    //sql을 데이터베이스로 보내기 전 단계구성
+    PreparedStatement query = connect.prepareStatement(sql);
 
-//월 마지막날 조회
-//String lastDay = rs.getString(1);
+    ResultSet result = query.executeQuery();
+
+    LocalDate today = LocalDate.now();
+    LocalDate settingDate = LocalDate.of(2023, 07, 01); //날짜 설정
+    LocalDate lastDayOfMonth = today.withDayOfMonth(today.lengthOfMonth()); // ex) 설정 달 5월일 경우 2023-05-31 출력
+    int choosenMonth = lastDayOfMonth.getMonthValue(); // lastDayOfMonth 값의 달
+    int choosenDay = lastDayOfMonth.getDayOfMonth(); // lastDayOfMonth 값의 날짜
+    //int prevMonth = today.plusMonths(1); // lastDayOfMonth 값의 달
+    //out.println(prevMonth);
+
+    if(result.next()){
+        String month = result.getString(1);
+        String day = result.getString(2);
+        String hour = result.getString(3);
+        String minute = result.getString(4);
+        String content = result.getString(5);
+    }
+
 %>
 
 
@@ -114,10 +120,13 @@ while(result.next()){
                 menu
             </span>
             <div class="month-box">
-                <span class="material-symbols-rounded arrow-left">
+                <span class="material-symbols-rounded arrow-left" onclick="prevMonth()">
                     arrow_back_ios_new
-                </span>      
-                <span class="month">3월</span>
+                </span>
+   
+                <span class="choosen-month hide"><%=choosenMonth%></span>
+                <span class="choosen-day hide"><%=choosenDay%></span>
+                <span class="month"><%=choosenMonth%>월</span>
                 <span class="material-symbols-rounded arrow-right">
                     arrow_forward_ios
                 </span>
@@ -129,31 +138,33 @@ while(result.next()){
         <!-- 내비게이션 메뉴 -->
 
         <!-- 사이드 바 -->
-        <div class="menu-bar">
-            <span class="material-symbols-rounded" onclick="closeNavigationMenu()">
-                close
-            </span>
-            <div class="menu-content">
-                <p class="greeting-message">김지현 팀원님, 환영합니다 :)</p>
-                <div class="all-schedules">
-                    <p class="schedule"><a href="#">나의 일정</a></p>
-                    <p class="schedule team"><a href="#" onclick="menuOpen()">팀원 일정</a></p>
-                    <div class="member">
-                        <span class="line"></span>
-                        <li class="member-schedule"><a href="#">김지현 팀원</a></li>
-                        <li class="member-schedule"><a href="#">이지현 팀원</a></li>
-                        <li class="member-schedule"><a href="#">백지현 팀원</a></li>
-                        <li class="member-schedule"><a href="#">전지현 팀원</a></li>
-                        <li class="member-schedule"><a href="#">유지현 팀원</a></li>
+        <div class="black-bg" id="menu-bar">
+            <div class="menu-bar">
+                <span class="material-symbols-rounded" onclick="closeNavigationMenu()">
+                    close
+                </span>
+                <div class="menu-content">
+                    <p class="greeting-message">김지현 팀원님, 환영합니다 :)</p>
+                    <div class="all-schedules">
+                        <p class="schedule"><a href="#">나의 일정</a></p>
+                        <p class="schedule team"><a href="#" onclick="menuOpen()">팀원 일정</a></p>
+                        <div class="member">
+                            <span class="line"></span>
+                            <li class="member-schedule"><a href="#">김지현 팀원</a></li>
+                            <li class="member-schedule"><a href="#">이지현 팀원</a></li>
+                            <li class="member-schedule"><a href="#">백지현 팀원</a></li>
+                            <li class="member-schedule"><a href="#">전지현 팀원</a></li>
+                            <li class="member-schedule"><a href="#">유지현 팀원</a></li>
+                        </div>
                     </div>
+                    <a href="/scheduler/user/logout.jsp" class="buttons">로그아웃</a>
                 </div>
-                <a href="/scheduler/user/logout.jsp" class="buttons">로그아웃</a>
             </div>
         </div>
         <!-- 사이드 바 -->
 
         <!-- 일정 시작 -->
-        <div class="box">
+        <!-- <div class="box first-box">
             <p class="date">3월 1일</p>
 
             <div class="schedule-box">
@@ -178,7 +189,7 @@ while(result.next()){
                 </div>
             </div>
             <span class="line"></span>
-        </div>
+        </div> -->
         <!-- 일정 끝 -->
 
     </div>

@@ -29,7 +29,7 @@
 }
 
 .incorrect{
-    display: block;
+    display: none;
     color:#FF5353;
 }
 

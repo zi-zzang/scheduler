@@ -108,11 +108,22 @@ a{
     display: inline-block;
 }
 
-/* @media (max-width: 1000px) {
-  .modal{
-    padding: 0 10px;
-  }
-} */
+@media (max-width: 1000px) {
+    .box{
+        padding:11px;
+        width:92%;
+    }
+}
 
 
 /* 공통 css */
+
+
+.duplicate{
+    font-size: 36px;
+    color: #1877f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height : 100vh;
+}

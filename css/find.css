@@ -1,3 +1,10 @@
-/* .find-box{
-    display: flex;
-} */
+.buttons{
+    margin-bottom: 15px;
+    color: #fff;
+    background-color: #1877f2;
+    border: none;
+    border-radius: 10px;
+}
+#wrap{
+    background-color: #fff;
+}

@@ -45,12 +45,17 @@ ResultSet result = query.executeQuery();
 // result 커서가 옮겨진다면
 if(result.next()){
     //getString = resultSet 개체의 현재 행에서 지정된 열 이름의 값을 검색해 문자열로 반환.
+    String idx = result.getString("user_idx");
     String id = result.getString("id");
     String pw = result.getString("pw");
-
+    String name = result.getString("name");
+    String position = result.getString("position");
     //세션에 값 저장.
+    session.setAttribute("idx", idx);
     session.setAttribute("id", id);
     session.setAttribute("pw", pw);
+    session.setAttribute("name", name);
+    session.setAttribute("position", position);
 
     %>
     <script>
@@ -60,7 +65,12 @@ if(result.next()){
 
     <%
 }else{
-    //인증실패하면 로그인창으로 이동
-    response.sendRedirect("login.html");
+
+    %>
+    <script>
+        alert("아이디와 비밀번호가 맞지 않습니다.");
+        location.href = "/scheduler/user/login.html";
+    </script>
+    <%
 }
 %>

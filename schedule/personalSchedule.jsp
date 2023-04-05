@@ -13,44 +13,43 @@
 request.setCharacterEncoding("utf-8"); 
 
 
-    // String sql = "SELECT * FROM schedule";
-    String sql = "SELECT MONTH(date) AS MONTH, DAY(date) AS DAY, LPAD(HOUR(time), 2, '0') AS HOUR, LPAD(MINUTE(time), 2, '0') AS MINUTE, content FROM schedule";
+// String sql = "SELECT * FROM schedule";
 
+Class.forName("com.mysql.jdbc.Driver"); 
 
-    // mysql 데이터 베이스를 사용하겠다
-    Class.forName("com.mysql.jdbc.Driver"); 
+Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/scheduler","stageus","1234") ;
 
-    //내가 연결할 데이터베이스의 주소
-    Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/scheduler","stageus","1234") ;
-    //데이터베이스 주소 mysql 포트는 3306
+String sql = "SELECT MONTH(date) AS MONTH, DAY(date) AS DAY, LPAD(HOUR(time), 2, '0') AS HOUR, LPAD(MINUTE(time), 2, '0') AS MINUTE, content, schedule_idx FROM schedule";
 
-    // 물음표에 값을 넣게 해줌.
-    //sql을 데이터베이스로 보내기 전 단계구성
-    PreparedStatement query = connect.prepareStatement(sql);
+PreparedStatement query = connect.prepareStatement(sql);
 
-    ResultSet result = query.executeQuery();
+ResultSet result = query.executeQuery();
 
-    LocalDate today = LocalDate.now();
-    LocalDate settingDate = LocalDate.of(2023, 07, 01); //날짜 설정
-    LocalDate lastDayOfMonth = today.withDayOfMonth(today.lengthOfMonth()); // ex) 설정 달 5월일 경우 2023-05-31 출력
-    int choosenMonth = lastDayOfMonth.getMonthValue(); // lastDayOfMonth 값의 달
-    int choosenDay = lastDayOfMonth.getDayOfMonth(); // lastDayOfMonth 값의 날짜
-    //int prevMonth = today.plusMonths(1); // lastDayOfMonth 값의 달
-    //out.println(prevMonth);
+LocalDate today = LocalDate.now();
+LocalDate settingDate = LocalDate.of(2023, 07, 01); //날짜 설정
+LocalDate lastDayOfMonth = today.withDayOfMonth(today.lengthOfMonth()); // ex) 설정 달 5월일 경우 2023-05-31 출력
+int choosenMonth = lastDayOfMonth.getMonthValue(); // lastDayOfMonth 값의 달
+int choosenDay = lastDayOfMonth.getDayOfMonth(); // lastDayOfMonth 값의 날짜
+//int prevMonth = today.plusMonths(1); // lastDayOfMonth 값의 달
+//out.println(prevMonth);
 
-    if(result.next()){
-        String month = result.getString(1);
-        String day = result.getString(2);
-        String hour = result.getString(3);
-        String minute = result.getString(4);
-        String content = result.getString(5);
-    }
+//loginAction에서 저장된 session (user 정보)
+String idx =(String)session.getAttribute("idx");
+String id =(String)session.getAttribute("id");
+String name = (String)session.getAttribute("name");
+String position = (String)session.getAttribute("position");
 
-%>
+//query.setString(1,idx);
 
-
-
-
+while(result.next()){
+    //schedule 저장된 데이터 가져오기
+    String month = result.getString(1);
+    String day = result.getString(2);
+    String hour = result.getString(3);
+    String minute = result.getString(4);
+    String content = result.getString(5);
+    String scheduleIdx = result.getString(6);
+    %>
 <!DOCTYPE html>
 <html lang="kr">
 <head>
@@ -74,7 +73,7 @@ request.setCharacterEncoding("utf-8");
             </form>
             <div class="modal-content">
                 <form action="addScheduleAction.jsp">
-                    <input type="date" name="date" value="2023-03-01" class="date-time">
+                    <input type="date" name="date" value="<%=lastDayOfMonth%>" class="date-time">
                     <input type="time" name="time" value="11:00" class="date-time">
                     <input type="text" name="content" placeholder="일정을 입력해 주세요." class="text-input">
                     <input type="submit" class="buttons" value="추가">
@@ -89,7 +88,7 @@ request.setCharacterEncoding("utf-8");
     <div class="black-bg" id="modify-schedule-modal">
         <div class="modal" id="modify-modal">
             <p class="bold">일정을 수정하시겠습니까?</p>
-            <form action="#">
+            <form action="modifyScheduleAction.jsp?schedule_idx=<%=scheduleIdx%>">
                 <input type="submit" class="buttons" value="예">
                 <input type="button" class="buttons" value="아니오" onclick="closeModal()">
             </form>
@@ -102,14 +101,13 @@ request.setCharacterEncoding("utf-8");
     <div class="black-bg" id="delete-schedule-modal">
         <div class="modal" id="delete-modal">
             <p class="bold">일정을 삭제하시겠습니까?</p>
-            <form action="#">
+            <form action="deleteScheduleAction.jsp?schedule_idx=<%=scheduleIdx%>">
                 <input type="submit" class="buttons" value="예">
                 <input type="button" class="buttons" value="아니오" onclick="closeModal()">
             </form>
-            </div>
         </div>
     </div>
-    <!-- 수정 팝업 -->    
+    <!-- 삭제 팝업 -->    
     
     
     <div id="wrap">
@@ -144,7 +142,7 @@ request.setCharacterEncoding("utf-8");
                     close
                 </span>
                 <div class="menu-content">
-                    <p class="greeting-message">김지현 팀원님, 환영합니다 :)</p>
+                    <p class="greeting-message"><%=name%> <span id="position"><%=position%></span>님, 환영합니다 :)</p>
                     <div class="all-schedules">
                         <p class="schedule"><a href="#">나의 일정</a></p>
                         <p class="schedule team"><a href="#" onclick="menuOpen()">팀원 일정</a></p>
@@ -165,12 +163,12 @@ request.setCharacterEncoding("utf-8");
 
         <!-- 일정 시작 -->
         <!-- <div class="box first-box">
-            <p class="date">3월 1일</p>
+            <p class="date">월 일</p>
 
             <div class="schedule-box">
                 <div class="schedule-content">
-                    <p class="schedule-item">09:00</p>
-                    <p class="schedule-item2">기상하기</p>
+                    <p class="schedule-item">시:분</p>
+                    <p class="schedule-item2">콘텐츠</p>
                 </div>
                 <div class="schedule-content2">
                     <button class="buttons modify" onclick="modifySchedule()">수정</button>
@@ -194,5 +192,75 @@ request.setCharacterEncoding("utf-8");
 
     </div>
     <script src="/scheduler/script/schedule.js"></script>
+    <script>
+        var choosenMonth = Number('<%=choosenMonth%>');
+        var choosenDay = Number('<%=choosenDay%>');
+        console.log(choosenDay);
+
+        
+
+        for(let i = 1; i < 2; i++){
+            var array = Array.from(document.querySelectorAll('.date'));
+            array.sort();
+            var box = document.createElement('div');
+            var date = document.createElement('p');
+            var scheduleBox = document.createElement('div');
+            var scheduleContent = document.createElement('div');
+            var scheduleContent2 = document.createElement('div');
+            var scheduleItem = document.createElement('p');
+            var scheduleItem2 = document.createElement('p');
+            var modifyButton = document.createElement('button');
+            var deleteButton = document.createElement('button');
+            var line = document.createElement('span');
+        
+            document.getElementById('wrap').appendChild(box);
+            box.appendChild(date);
+            box.appendChild(scheduleBox);
+            scheduleBox.appendChild(scheduleContent);
+            scheduleBox.appendChild(scheduleContent2);
+            scheduleContent.appendChild(scheduleItem);
+            scheduleContent.appendChild(scheduleItem2);
+        
+            box.appendChild(line);
+        
+            box.classList.add('box');
+        
+            date.classList.add('date');
+            scheduleBox.classList.add('schedule-box');
+            scheduleContent.classList.add('schedule-content');
+            scheduleContent2.classList.add('schedule-content2');
+            scheduleItem.classList.add('schedule-item');
+            scheduleItem2.classList.add('schedule-item2');
+        
+            
+            date.innerHTML = '<%=month%>월 <%=day%>일';
+            scheduleContent2.appendChild(modifyButton);
+            scheduleContent2.appendChild(deleteButton);
+
+            modifyButton.classList.add('buttons');
+            modifyButton.classList.add('modify');
+            modifyButton.id='modify-schedule-modal';
+            modifyButton.onclick = modifySchedule;
+            // modifyButton.classList.add('hide');
+
+            deleteButton.classList.add('buttons');
+            deleteButton.classList.add('delete');
+            deleteButton.id='delete-schedule-modal';
+            deleteButton.onclick = deleteSchedule;
+            // deleteButton.classList.add('hide');
+
+            line.classList.add('line');
+            line.classList.add('hide');
+
+            scheduleItem.innerHTML = '<%=hour%>:<%=minute%>';
+            scheduleItem2.innerHTML = '<%=content%>';
+
+            modifyButton.innerHTML = '수정';
+            deleteButton.innerHTML = '삭제';
+        }
+    </script>
 </body>
 </html>
+<%
+}
+%>

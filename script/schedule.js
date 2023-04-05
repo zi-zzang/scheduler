@@ -52,56 +52,66 @@ function prevMonth(){
     console.log(choosenMonth);
 }
 
-for(let i = 1; i < choosenDay+1; i++){
+// for(let i = 1; i < choosenDay+1; i++){
 
-    var box = document.createElement('div');
-    var date = document.createElement('p');
-    var scheduleBox = document.createElement('div');
-    var scheduleContent = document.createElement('div');
-    var scheduleContent2 = document.createElement('div');
-    var scheduleItem = document.createElement('p');
-    var scheduleItem2 = document.createElement('p');
-    var modifyButton = document.createElement('button');
-    var deleteButton = document.createElement('button');
-    var line = document.createElement('span');
+//     var box = document.createElement('div');
+//     var date = document.createElement('p');
+//     var scheduleBox = document.createElement('div');
+//     var scheduleContent = document.createElement('div');
+//     var scheduleContent2 = document.createElement('div');
+//     var scheduleItem = document.createElement('p');
+//     var scheduleItem2 = document.createElement('p');
+//     var modifyButton = document.createElement('button');
+//     var deleteButton = document.createElement('button');
+//     var line = document.createElement('span');
 
-    document.getElementById('wrap').appendChild(box);
-    box.appendChild(date);
-    box.appendChild(scheduleBox);
-    scheduleBox.appendChild(scheduleContent);
-    scheduleBox.appendChild(scheduleContent2);
-    scheduleContent.appendChild(scheduleItem);
-    scheduleContent.appendChild(scheduleItem2);
-    scheduleContent2.appendChild(modifyButton);
-    scheduleContent2.appendChild(deleteButton);
-    box.appendChild(line);
+//     document.getElementById('wrap').appendChild(box);
+//     box.appendChild(date);
+//     box.appendChild(scheduleBox);
+//     scheduleBox.appendChild(scheduleContent);
+//     scheduleBox.appendChild(scheduleContent2);
+//     scheduleContent.appendChild(scheduleItem);
+//     scheduleContent.appendChild(scheduleItem2);
 
-    box.classList.add('box');
-    if(i === 1){
-        box.classList.add('first-box');
-    }
+//     box.appendChild(line);
+
+//     box.classList.add('box');
+//     if(i === 1){
+//         box.classList.add('first-box');
+//     }
    
-    date.classList.add('date');
-    scheduleBox.classList.add('schedule-box');
-    scheduleContent.classList.add('schedule-content');
-    scheduleContent2.classList.add('schedule-content2');
-    scheduleItem.classList.add('schedule-item');
-    scheduleItem2.classList.add('schedule-item2');
-    modifyButton.classList.add('buttons');
-    modifyButton.classList.add('modify');
-    deleteButton.classList.add('buttons');
-    deleteButton.classList.add('delete');
-    line.classList.add('line');
+//     date.classList.add('date');
+//     scheduleBox.classList.add('schedule-box');
+//     scheduleContent.classList.add('schedule-content');
+//     scheduleContent2.classList.add('schedule-content2');
+//     scheduleItem.classList.add('schedule-item');
+//     scheduleItem2.classList.add('schedule-item2');
 
-    date.innerHTML = `${choosenMonth}월 ${i}일`;
-    scheduleItem.innerHTML = '09:00';
-    scheduleItem2.innerHTML = '기상하기';
-    modifyButton.innerHTML = '수정';
-    deleteButton.innerHTML = '삭제';
-}
+    
+//     date.innerHTML = `${choosenMonth}월 ${i}일`;
+//     scheduleContent2.appendChild(modifyButton);
+//     scheduleContent2.appendChild(deleteButton);
+//     modifyButton.classList.add('buttons');
+//     modifyButton.classList.add('modify');
+//     modifyButton.classList.add('hide');
+//     deleteButton.classList.add('buttons');
+//     deleteButton.classList.add('delete');
+//     deleteButton.classList.add('hide');
+//     line.classList.add('line');
+//     line.classList.add('hide');
+//     scheduleItem.innerHTML = '09:00';
+//     scheduleItem2.innerHTML = '기상하기';
+//     modifyButton.innerHTML = '수정';
+//     deleteButton.innerHTML = '삭제';
+// }
 
 var prevButton = document.getElementsByClassName('.arrow-left');
 var nextButton = document.getElementsByClassName('.arrow-right');
 
 
-
+console.log(document.getElementById('position').textContent);
+if(document.getElementById('position').textContent == '팀장'){
+    document.querySelector('.team').style.display = 'block';
+}else{
+    document.querySelector('.team').style.display = 'none';
+}

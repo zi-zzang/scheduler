@@ -1,3 +1,4 @@
+
 #add-modal{
     width:700px;
 }
@@ -12,6 +13,7 @@
 #wrap{
     display:inline-block;
     height:100%;
+    padding-top:160px;
 }
 .first-box{
     margin-top:150px;
@@ -126,7 +128,9 @@
     font-weight: normal;
     margin: 10px 20px;
 }
-
+.team{
+    display:none;
+}
 .buttons{
     font-size:14px;
     margin:0 8px;

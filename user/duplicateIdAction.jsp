@@ -36,11 +36,11 @@ try {
             <link rel="stylesheet" href="/scheduler/css/index.css">
         </head>
         <body>
-            <p class="duplicate">이 아이디는 이미 사용중입니다.</p>
+            <p class="duplicate" id="parentValue" >이 아이디는 이미 사용중입니다.</p>
         </body>
         </html>
         <script>
-            var parentWindow = window.opener;
+            window.opener.duplicateId(true);
         </script>
         <%
     }else{
@@ -59,7 +59,7 @@ try {
         </body>
         </html>
         <script>
-            var parentWindow = window.opener;
+            window.opener.duplicateId(false);
         </script>
         <%
     }

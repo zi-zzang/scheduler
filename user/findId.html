@@ -6,20 +6,27 @@
     <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" />
     <title>아이디 찾기</title>
     <link rel="stylesheet" href="/scheduler/css/index.css">
-    <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
     <div id="wrap">
         <div class="box">
             <main>
                 <h1 class="title">아이디 찾기</h1>
-                <form action="findIdAction.jsp" class="form-box">
+                <form class="form-box">
                     <input type="text" name="name" placeholder="이름" id="name" class="input-box" maxlength="20">
                     <input type="text" name="phone_number" placeholder="전화번호 (- 제외)" id="phone_number" class="input-box" maxlength="11">
-                    <input type="submit"  value="아이디 찾기" id="submit" class="input-box buttons">
+                    <input type="submit"  value="아이디 찾기" id="submit" class="input-box buttons" onclick="findIdOpener(event)">
                 </form>
             </main>
         </div>
      </div>
 </body>
+<script>
+        function findIdOpener(e){
+        e.preventDefault();
+        var uname = document.getElementById('name').value;
+        var uphoneNumber = document.getElementById('phone_number').value;
+        var openWin = window.open(`/scheduler/user/findIdAction.jsp?name=${uname}&phone_number=${uphoneNumber}`, 'findId',"width=555,height=405,top=250,left=700" );
+    }
+</script>
 </html>

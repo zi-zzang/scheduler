@@ -19,4 +19,6 @@ function confirmModal(message){
     submit.classList.add('buttons');
     button.classList.add('buttons');
     
+    bold.innerHTML = message;
+    submit.innerHTML
 }

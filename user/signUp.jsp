@@ -40,6 +40,8 @@ Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/schedul
                         <input type="button" value="중복확인" class="buttons" id="duplicate-button" onclick="idOpener()">
                     </div>
                     <p class="exception incorrect" id="id-incorrect">5~20자의 영문 소문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.</p>
+                    <p class="exception incorrect" id="disable-id"></p>
+                    <p class="exception correct" id="able-id"></p>
                     <p class="sub-title">비밀번호</p>
                     <input type="password" name="pw" placeholder="사용할 비밀번호를 입력해 주세요." id="pw" class="input-box" maxlength="20" oninput="pwCheck()">
                     <p class="exception incorrect" id="pw-incorrect">영문 대/소문자 구별, 숫자, 특수문자 포함 3자 이상 20자 이하로만 입력해 주세요.</p>
@@ -57,9 +59,32 @@ Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/schedul
      </div>
 </body>
 <script>
+    let openWin;
+
+    function idOpener(){
+        var uid = document.getElementById('id').value;
+        openWin = window.open('/scheduler/user/duplicateIdAction.jsp?id='+uid, 'duplicate',"width=555,height=405,top=250,left=700" );
+    }
+
+    function duplicateId(duplicate){
+        var disableId = document.getElementById('disable-id')
+        var ableId = document.getElementById('able-id')
+        if(duplicate){
+            disableId.innerText = "이미 사용중인 아이디입니다."
+            disableId.style.display = 'block';
+            ableId.style.display = 'none';
+        }else{
+            ableId.innerText = "사용 가능한 아이디입니다."
+            ableId.style.display = 'block';
+            disableId.style.display = 'none';
+        }
+    }   
+
     function idCheck(){
         var uid = document.getElementById('id').value;
         var idIncorrect = document.getElementById('id-incorrect');
+        var disableId = document.getElementById('disable-id')
+        var ableId = document.getElementById('able-id')
         var pattern = /^[a-z0-9_-]{5,20}$/;
     
         if(pattern.test(uid)){
@@ -68,17 +93,23 @@ Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/schedul
         }else{
             idIncorrect.style.display = 'block';
         }
+        if(uid == ""){
+            idIncorrect.style.display = 'none';
+            ableId.style.display = 'none';
+            disableId.style.display = 'none';
+        }
     }
-    function idOpener(){
-        var uid = document.getElementById('id').value;
-        var newWindow = window.open('/scheduler/user/duplicateIdAction.jsp?id='+uid, 'duplicate',"width=555,height=405,top=250,left=700" );
-        console.log(uid);
-    }
+
     function pwCheck(){
         var pw = document.getElementById("pw").value;
         var pwIncorrect = document.getElementById("pw-incorrect");
         var pwCorrect = document.getElementById("pw-correct");
         var pattern = /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{3,20}$/;
+
+        if(pw == ""){
+            pwIncorrect.style.display = "none";
+            pwCorrect.style.display = "none";
+        }
 
         if (pw.length < 3 || pw.length > 20) {
             pwIncorrect.style.display = "block";
@@ -95,15 +126,25 @@ Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/schedul
             pwCorrect.style.display = "none";
             return false;
         }
+
+        
     }
+    
+
     function joinCheck(){
         if(!document.joinform.id.value){
             alert("아이디가 입력 되지 않았습니다.");
             return false;
         }
+        if(document.joinform.id.value.length <5){
+            alert("아이디가 너무 짧습니다. 5자 이상 20자 이하의 아이디를 입력해 주세요.");
+        }
         if(!document.joinform.pw.value){
             alert("비밀번호를 입력해 주세요.");
             return false;
+        }
+        if(document.joinform.pw.value.length <3){
+            alert("비밀번호가 너무 짧습니다. 3자 이상 20자 이하의 비밀번호를 입력해 주세요.");
         }
         if(!document.joinform.name.value){
             alert("이름을 입력해 주세요.");
@@ -117,7 +158,13 @@ Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/schedul
             alert("직급을 입력해 주세요.");
             return false;
         }
+        if(document.joinform.position.value != '팀원' && document.joinform.position.value != '팀장' && document.joinform.position.value != '관리자'){
+            alert("직급은 팀원, 팀장만 사용할 수 있습니다.");
+            return false;
+        }
         return true;
 }
+
+    
 </script>
 </html>

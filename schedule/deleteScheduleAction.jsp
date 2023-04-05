@@ -17,4 +17,21 @@ Class.forName("com.mysql.jdbc.Driver");
 Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/scheduler","stageus","1234") ;
 //데이터베이스 주소 mysql 포트는 3306
 
+String scheduleIdx = request.getParameter("schedule_idx");
+
+String sql = "DELETE FROM schedule WHERE schedule_idx=?";
+
+
+PreparedStatement query = connect.prepareStatement(sql);
+
+query.setString(1,scheduleIdx);
+
+int result = query.executeUpdate();
+
 %>
+
+<script>
+    alert('해당 글을 삭제했습니다.');
+    location.href="personalSchedule.jsp";
+
+</script>

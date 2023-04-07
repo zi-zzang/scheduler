@@ -18,12 +18,13 @@ String hour = request.getParameter("hour");
 String minute = request.getParameter("minute");
 String content = request.getParameter("content");
 
+String time = hour+":"+minute;
 String sql = "UPDATE schedule SET time=? AND content =? WHERE schedule_idx=?";
 
 
 PreparedStatement query = connect.prepareStatement(sql);
 
-query.setString(1,hour+":"+minute);
+query.setString(1,time);
 query.setString(2,content);
 query.setString(3,scheduleIdx);
 

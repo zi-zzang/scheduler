@@ -32,17 +32,26 @@ query.setString(1,idx);
 
 ResultSet result = query.executeQuery();
 
+//2차원 array 리스트
+ArrayList <ArrayList<String>> array = new ArrayList<ArrayList<String>>();
+//new = 메모리에 공간을 할당해달라는 의미(옛날언어에만 있음)
+while(result.next()){
+    ArrayList <String> tmp = new ArrayList<String>();
+    tmp.add("\""+result.getString(1)+"\"");
+    tmp.add("\""+result.getString(2)+"\"");
+    tmp.add("\""+result.getString(3)+"\"");
+    tmp.add("\""+result.getString(4)+"\"");
+    tmp.add("\""+result.getString(5)+"\"");
+    tmp.add("\""+result.getString(6)+"\"");
+    array.add(tmp);
+};
+
+
 LocalDate today = LocalDate.now();
 LocalDate lastDayOfMonth = today.withDayOfMonth(today.lengthOfMonth()); // ex) 설정 달 5월일 경우 2023-05-31 출력
 int choosenMonth = lastDayOfMonth.getMonthValue(); // lastDayOfMonth 값의 달
 int choosenDay = lastDayOfMonth.getDayOfMonth(); // lastDayOfMonth 값의 날짜
 
-String month = null;
-String day = null;
-String hour = null;
-String minute = null;
-String content = null;
-String scheduleIdx = null;
 
 %>
 <!DOCTYPE html>
@@ -110,16 +119,7 @@ String scheduleIdx = null;
     </div>
 
         <!-- 데이터베이스에 있는 일정 불러오기 -->
-        <%
-        while(result.next()){
-            //schedule 저장된 데이터 가져오기
-            month = result.getString(1);
-            day = result.getString(2);
-            hour = result.getString(3);
-            minute = result.getString(4);
-            content = result.getString(5);
-            scheduleIdx = result.getString(6);
-        %>
+
         <!-- 사이드 바 -->
     <div class="black-bg" id="menu-bar">
         <div class="menu-bar">
@@ -181,8 +181,8 @@ String scheduleIdx = null;
         <div class="modal" id="delete-modal">
             <p class="bold">일정을 삭제하시겠습니까?</p>
             <form action="deleteScheduleAction.jsp">
-                <input type="button" class="buttons" value="예" onclick="deleteSchedule(<%=scheduleIdx%>)">
-                <input type="button" class="buttons" value="아니오" onclick="closeModal()">
+                <input type="button" class="buttons" id="delete-modal-yes" value="예">
+                <input type="button" class="buttons" id="delete-modal-no" value="아니오" onclick="closeModal()">
             </form>
         </div>
     </div>
@@ -191,13 +191,11 @@ String scheduleIdx = null;
     <script>
         var choosenDay = Number('<%=choosenDay%>');
         var choosenMonth = Number('<%=choosenMonth%>');
-        var month = Number('<%=month%>');
-        var day = Number('<%=day%>');
-        var hour = Number('<%=hour%>');
-        var minute = Number('<%=minute%>');
-        var content = Number('<%=content%>');
-        var scheduleIdx = Number('<%=scheduleIdx%>');
-
+        //데이터 array
+        var data = <%=array%>;
+        let i;
+        console.log(data[i]);
+        // let scheduleIdx;
         var count = 0;
 
         function closeModal(){
@@ -210,20 +208,34 @@ String scheduleIdx = null;
         function addSchedule(){
         document.querySelector("#add-schedule-modal").style.visibility = 'visible';
         }
-
-        function deleteSchedule(scheduleIdx){
-            window.location='deleteScheduleAction.jsp?schedule_idx='+scheduleIdx;
-        }
         function modifySchedule(){
-            window.location='modifyScheduleAction.jsp?schedule_idx='+scheduleIdx+'&month='+month+'&day='+day+'&hour='+hour+'&minute='+minute+'&content='+content;
+            // window.location='modifyScheduleAction.jsp?schedule_idx='+scheduleIdx+'&month='+month+'&day='+day+'&hour='+hour+'&minute='+minute+'&content='+content;
         }
-
+        function deleteSchedule(){
+        window.location=`deleteScheduleAction.jsp?schedule_idx=`;
+        // console.log(data[index][5]);
+        }
         function modifyModal(){
         document.querySelector('#modify-schedule-modal').style.visibility='visible';
         }
 
         function deleteModal(){
         document.querySelector('#delete-schedule-modal').style.visibility='visible';
+        var yesButton = document.getElementById('delete-modal-yes');
+        var noButton = document.getElementById('delete-modal-no');
+
+        yesButton.onclick = function() {
+            document.querySelector('#delete-schedule-modal').style.visibility = 'hidden';
+            deleteSchedule(data[i][5]);
+        };
+
+        noButton.onclick = function() {
+            modal.style.visibility = 'hidden';
+        };
+        }
+
+        function modifyAction(){
+            // var modifyContent = document.querySelector('.schedule-content[name="''"]');
         }
 
         function navigationMenu(){
@@ -249,79 +261,54 @@ String scheduleIdx = null;
         }else{
         document.querySelector('.team').style.display = 'none';
         }
-        </script>
-
-        
-        
-
-        <script>
-        for(let i = 0; i < 1; i++){
-        var box = document.createElement('div');
-        document.getElementById('wrap').appendChild(box);
-        var date = document.createElement('p');
-        var scheduleBox = document.createElement('form');
-        var scheduleContent = document.createElement('div');
-        var scheduleContent2 = document.createElement('div');
-        var scheduleItem = document.createElement('p');
-        var scheduleItem2 = document.createElement('p');
-        var modifyButton = document.createElement('input');
-        var deleteButton = document.createElement('input');
-        var line = document.createElement('span');
-
-        box.appendChild(date);
-        box.appendChild(scheduleBox);
-        scheduleBox.appendChild(scheduleContent);
-        scheduleBox.appendChild(scheduleContent2);
-        scheduleContent.appendChild(scheduleItem);
-        scheduleContent.appendChild(scheduleItem2);
-
-        box.appendChild(line);
-
-        box.classList.add('box');
-
-        date.classList.add('date');
-        scheduleBox.classList.add('schedule-box');
-        scheduleContent.classList.add('schedule-content');
-        // scheduleBox.setAttribute('action','deleteScheduleAction.jsp?schedule_idx='+scheduleIdx);
-        scheduleContent.setAttribute('name',scheduleIdx);
-        console.log(scheduleIdx);
-
-        scheduleContent2.classList.add('schedule-content2');
-        scheduleItem.classList.add('schedule-item');
-        scheduleItem2.classList.add('schedule-item2');
-
-
-        date.innerHTML = `<%=month%>월 <%=day%>일`;
-        var existDate = date.textContent;
-        scheduleContent2.appendChild(modifyButton);
-        scheduleContent2.appendChild(deleteButton);
-
-        modifyButton.classList.add('buttons');
-        modifyButton.classList.add('modify');
-        modifyButton.onclick = modifyModal;
-        modifyButton.setAttribute('type','button');
-
-        deleteButton.classList.add('buttons');
-        deleteButton.classList.add('delete');
-
-        deleteButton.setAttribute('type','button');
-        deleteButton.onclick = function(){deleteModal(scheduleIdx)};
-
-        line.classList.add('line');
-
-        scheduleItem.innerHTML = '<%=hour%>:<%=minute%>';
-        scheduleItem2.innerHTML = '<%=content%>';
-
-        modifyButton.value = '수정';
-        deleteButton.value = '삭제';
-
+        for(i = 0; i < data.length; i++){
+            console.log(data,data[i],data[i][5]);
+            var box = document.createElement('div');
+            document.getElementById('wrap').appendChild(box);
+            var date = document.createElement('p');
+            var scheduleBox = document.createElement('form');
+            var scheduleContent = document.createElement('div');
+            var scheduleContent2 = document.createElement('div');
+            var scheduleItem = document.createElement('p');
+            var scheduleItem2 = document.createElement('p');
+            var modifyButton = document.createElement('input');
+            var deleteButton = document.createElement('input');
+            var line = document.createElement('span');
+            box.appendChild(date);
+            box.appendChild(scheduleBox);
+            scheduleBox.appendChild(scheduleContent);
+            scheduleBox.appendChild(scheduleContent2);
+            scheduleContent.appendChild(scheduleItem);
+            scheduleContent.appendChild(scheduleItem2);
+            box.appendChild(line);
+            box.classList.add('box');
+            date.classList.add('date');
+            scheduleBox.classList.add('schedule-box');
+            scheduleContent.classList.add('schedule-content');
+            scheduleBox.setAttribute('action','deleteScheduleAction.jsp?schedule_idx='+data[i][5]);
+            scheduleContent.setAttribute('name',data[i][5]);
+            // console.log(scheduleIdx);
+            scheduleContent2.classList.add('schedule-content2');
+            scheduleItem.classList.add('schedule-item');
+            scheduleItem2.classList.add('schedule-item2');
+            date.innerHTML = data[i][0]+'월'+ data[i][1]+'일';
+            scheduleContent2.appendChild(modifyButton);
+            scheduleContent2.appendChild(deleteButton);
+            modifyButton.classList.add('buttons');
+            modifyButton.classList.add('modify');
+            modifyButton.onclick = modifyModal;
+            modifyButton.setAttribute('type','button');
+            deleteButton.classList.add('buttons');
+            deleteButton.classList.add('delete');
+            deleteButton.setAttribute('type','button');
+            deleteButton.onclick = deleteModal;
+            line.classList.add('line');
+            scheduleItem.innerHTML = data[i][2]+":"+data[i][3];
+            scheduleItem2.innerHTML = data[i][4];   
+            modifyButton.value = '수정';
+            deleteButton.value = '삭제';
         }
-        
-        
     </script>
-<%
-}
-%>
 </body>
 </html>
 

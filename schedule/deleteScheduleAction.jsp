@@ -28,10 +28,11 @@ query.setString(1,scheduleIdx);
 
 int result = query.executeUpdate();
 
+out.println(scheduleIdx);
 %>
 
 <script>
-    alert('해당 글을 삭제했습니다.');
-    location.href="personalSchedule.jsp";
+    // alert('해당 글을 삭제했습니다.');
+    // location.href="personalSchedule.jsp";
 
 </script>

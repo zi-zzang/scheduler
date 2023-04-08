@@ -30,6 +30,7 @@ query.setString(3,scheduleIdx);
 
 int result = query.executeUpdate();
 
+out.println(scheduleIdx);
 %>
 
 <script>

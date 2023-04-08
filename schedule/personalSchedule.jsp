@@ -89,33 +89,6 @@ int choosenDay = lastDayOfMonth.getDayOfMonth(); // lastDayOfMonth 값의 날짜
             </span>
         </div>
         <!-- 내비게이션 메뉴 -->
-
-        <div class="box">
-            <p class="date">3월 1일</p>
-
-            <div class="schedule-box">
-                <div class="schedule-content">
-                    <p class="schedule-item">09:00</p>
-                    <p class="schedule-item">기상하기</p>
-                </div>
-                <div class="schedule-content">
-                    <button class="buttons modify" onclick="modifyModal()">수정</button>
-                    <button class="buttons delete" onclick="deleteModal()">삭제</button>
-                </div>
-            </div>
-            <span class="line"></span>
-            <div class="schedule-box">
-                <div class="schedule-content">
-                    <p class="schedule-item">09:00</p>
-                    <p class="schedule-item">기상하기</p>
-                </div>
-                <div class="schedule-content">
-                    <button class="buttons modify">수정</button>
-                    <button class="buttons delete">삭제</button>
-                </div>
-            </div>
-            <span class="line"></span>
-        </div>
     </div>
 
         <!-- 데이터베이스에 있는 일정 불러오기 -->
@@ -153,7 +126,7 @@ int choosenDay = lastDayOfMonth.getDayOfMonth(); // lastDayOfMonth 값의 날짜
             <p class="bold">일정 추가</p>
             <div class="modal-content">
                 <form action="addScheduleAction.jsp">
-                    <input type="date" name="date" value="<%=lastDayOfMonth%>" class="date-time">
+                    <input type="date" name="date" value="<%=today%>" class="date-time">
                     <input type="time" name="time" value="11:00" class="date-time">
                     <input type="text" name="content" placeholder="일정을 입력해 주세요." class="text-input">
                     <input type="submit" class="buttons" value="추가">
@@ -169,8 +142,8 @@ int choosenDay = lastDayOfMonth.getDayOfMonth(); // lastDayOfMonth 값의 날짜
         <div class="modal" id="modify-modal">
             <p class="bold">일정을 수정하시겠습니까?</p>
             <form action="modifyScheduleAction.jsp">
-                <input type="button" class="buttons" value="예" onclick="modifySchedule()">
-                <input type="button" class="buttons" value="아니오" onclick="closeModal()">
+                <input type="button" class="buttons" id="modify-modal-yes" value="예" onclick="modifySchedule()">
+                <input type="button" class="buttons" id="modify-modal-no" value="아니오" onclick="closeModal()">
             </form>
         </div>
     </div>
@@ -180,7 +153,7 @@ int choosenDay = lastDayOfMonth.getDayOfMonth(); // lastDayOfMonth 값의 날짜
     <div class="black-bg" id="delete-schedule-modal">
         <div class="modal" id="delete-modal">
             <p class="bold">일정을 삭제하시겠습니까?</p>
-            <form action="deleteScheduleAction.jsp">
+            <form>
                 <input type="button" class="buttons" id="delete-modal-yes" value="예">
                 <input type="button" class="buttons" id="delete-modal-no" value="아니오" onclick="closeModal()">
             </form>
@@ -194,7 +167,6 @@ int choosenDay = lastDayOfMonth.getDayOfMonth(); // lastDayOfMonth 값의 날짜
         //데이터 array
         var data = <%=array%>;
         let i;
-        console.log(data[i]);
         // let scheduleIdx;
         var count = 0;
 
@@ -208,34 +180,12 @@ int choosenDay = lastDayOfMonth.getDayOfMonth(); // lastDayOfMonth 값의 날짜
         function addSchedule(){
         document.querySelector("#add-schedule-modal").style.visibility = 'visible';
         }
-        function modifySchedule(){
-            // window.location='modifyScheduleAction.jsp?schedule_idx='+scheduleIdx+'&month='+month+'&day='+day+'&hour='+hour+'&minute='+minute+'&content='+content;
-        }
-        function deleteSchedule(){
-        window.location=`deleteScheduleAction.jsp?schedule_idx=`;
-        // console.log(data[index][5]);
-        }
-        function modifyModal(){
-        document.querySelector('#modify-schedule-modal').style.visibility='visible';
-        }
-
-        function deleteModal(){
-        document.querySelector('#delete-schedule-modal').style.visibility='visible';
-        var yesButton = document.getElementById('delete-modal-yes');
-        var noButton = document.getElementById('delete-modal-no');
-
-        yesButton.onclick = function() {
-            document.querySelector('#delete-schedule-modal').style.visibility = 'hidden';
-            deleteSchedule(data[i][5]);
-        };
-
-        noButton.onclick = function() {
-            modal.style.visibility = 'hidden';
-        };
+        function deleteAction(idx){
+        window.location='deleteScheduleAction.jsp?schedule_idx='+idx;
         }
 
         function modifyAction(){
-            // var modifyContent = document.querySelector('.schedule-content[name="''"]');
+            window.location='modifyScheduleAction.jsp?schedule_idx='
         }
 
         function navigationMenu(){
@@ -261,52 +211,153 @@ int choosenDay = lastDayOfMonth.getDayOfMonth(); // lastDayOfMonth 값의 날짜
         }else{
         document.querySelector('.team').style.display = 'none';
         }
-        for(i = 0; i < data.length; i++){
-            console.log(data,data[i],data[i][5]);
-            var box = document.createElement('div');
-            document.getElementById('wrap').appendChild(box);
-            var date = document.createElement('p');
+        
+        var currentDate = '';
+        var currentBox = null;
+
+        for (i = 0; i < data.length; i++) {
+
+            currentDate = data[i][0] + "월" + data[i][1] + "일";
+            if (!currentBox || currentBox.querySelector('.date').innerHTML !== currentDate) {
+                //만약 box의 값이 없거나 혹은 박스의 데이터 값이 현재 데이터 값과 다르다면
+                var date = document.createElement('p');
+                date.classList.add('date');
+                date.innerHTML = currentDate;
+                currentBox = document.createElement('div');
+                document.getElementById('wrap').appendChild(currentBox);
+                currentBox.classList.add('box');
+                currentBox.appendChild(date);
+            }
+
+            //날짜가 겹칠 경우
             var scheduleBox = document.createElement('form');
             var scheduleContent = document.createElement('div');
             var scheduleContent2 = document.createElement('div');
             var scheduleItem = document.createElement('p');
             var scheduleItem2 = document.createElement('p');
+            var scheduleItem3 = document.createElement('p');
+            var scheduleItem4 = document.createElement('p');
             var modifyButton = document.createElement('input');
             var deleteButton = document.createElement('input');
+            var saveButton = document.createElement('input');
+            var cancelButton = document.createElement('input');
             var line = document.createElement('span');
-            box.appendChild(date);
-            box.appendChild(scheduleBox);
+
+
+            currentBox.appendChild(scheduleBox);
             scheduleBox.appendChild(scheduleContent);
             scheduleBox.appendChild(scheduleContent2);
             scheduleContent.appendChild(scheduleItem);
             scheduleContent.appendChild(scheduleItem2);
-            box.appendChild(line);
-            box.classList.add('box');
-            date.classList.add('date');
-            scheduleBox.classList.add('schedule-box');
-            scheduleContent.classList.add('schedule-content');
-            scheduleBox.setAttribute('action','deleteScheduleAction.jsp?schedule_idx='+data[i][5]);
-            scheduleContent.setAttribute('name',data[i][5]);
-            // console.log(scheduleIdx);
-            scheduleContent2.classList.add('schedule-content2');
-            scheduleItem.classList.add('schedule-item');
-            scheduleItem2.classList.add('schedule-item2');
-            date.innerHTML = data[i][0]+'월'+ data[i][1]+'일';
+            scheduleContent.appendChild(scheduleItem3);
+            scheduleContent.appendChild(scheduleItem4);
             scheduleContent2.appendChild(modifyButton);
             scheduleContent2.appendChild(deleteButton);
+            scheduleContent2.appendChild(saveButton);
+            scheduleContent2.appendChild(cancelButton);
+
+            scheduleContent.classList.add('schedule-content');
+            scheduleBox.classList.add('schedule-box');
+            scheduleContent2.classList.add('schedule-content2');
+            scheduleItem.classList.add('schedule-item');
+            scheduleItem2.classList.add('schedule-item');
+            scheduleItem3.classList.add('schedule-item');
+            scheduleItem4.classList.add('schedule-item2');
+
             modifyButton.classList.add('buttons');
             modifyButton.classList.add('modify');
             modifyButton.onclick = modifyModal;
-            modifyButton.setAttribute('type','button');
+            modifyButton.setAttribute('type', 'button');
+
             deleteButton.classList.add('buttons');
             deleteButton.classList.add('delete');
-            deleteButton.setAttribute('type','button');
-            deleteButton.onclick = deleteModal;
+            deleteButton.setAttribute('type', 'button');
+            deleteButton.onclick = ()=>{deleteModal(idx)};
+
+            saveButton.classList.add('buttons');
+            saveButton.classList.add('save');
+            saveButton.classList.add('hide');
+            saveButton.setAttribute('type', 'button');
+            
+            cancelButton.classList.add('buttons');
+            cancelButton.classList.add('cancel');
+            cancelButton.classList.add('hide');
+            cancelButton.setAttribute('type', 'button');
+
+
             line.classList.add('line');
-            scheduleItem.innerHTML = data[i][2]+":"+data[i][3];
-            scheduleItem2.innerHTML = data[i][4];   
+            scheduleItem.innerHTML = data[i][2];
+            scheduleItem2.innerHTML = ":";
+            scheduleItem3.innerHTML = data[i][3];
+            scheduleItem4.innerHTML = data[i][4];
             modifyButton.value = '수정';
             deleteButton.value = '삭제';
+            saveButton.value = '저장';
+            cancelButton.value = '취소';
+            currentBox.appendChild(line);
+
+             //일정 삭제
+             var idx = data[i][5];
+            function deleteModal(idx){
+                document.querySelector('#delete-schedule-modal').style.visibility='visible';
+                var yesButton = document.getElementById('delete-modal-yes');
+                var noButton = document.getElementById('delete-modal-no');
+                console.log(idx);
+                yesButton.onclick = function() {
+                    document.querySelector('#delete-schedule-modal').style.visibility = 'hidden';
+                    deleteAction(idx);
+                };
+
+                noButton.onclick = function() {
+                    document.querySelector('#delete-schedule-modal').style.visibility = 'hidden';
+                };
+            }
+
+            //일정 수정
+            function modifyModal(idx){
+                document.querySelector('#modify-schedule-modal').style.visibility='visible';
+                var yesButton = document.getElementById('modify-modal-yes');
+                var noButton = document.getElementById('modify-modal-no');
+                console.log(idx)
+                yesButton.onclick = function() {
+                    document.querySelector('#modify-schedule-modal').style.visibility = 'hidden';
+                    var changeScheduleItem = document.createElement("input"); //11
+                    var changeScheduleItem3 = document.createElement("input");//00
+                    var changeScheduleItem4 = document.createElement("input"); //내용
+
+                    changeScheduleItem.type = "text";
+                    changeScheduleItem3.type = "text";
+                    changeScheduleItem4.type = "text";
+
+                    changeScheduleItem.setAttribute('name','hour');
+                    changeScheduleItem3.setAttribute('name','minute');
+                    changeScheduleItem4.setAttribute('name','content');
+                    
+                    changeScheduleItem.value = scheduleItem.innerText;
+                    changeScheduleItem3.value = scheduleItem3.innerText;
+                    scheduleItem.parentNode.replaceChild(changeScheduleItem,scheduleItem);
+                    scheduleItem3.parentNode.replaceChild(changeScheduleItem3,scheduleItem3);
+                    changeScheduleItem.classList.add('time');
+                    changeScheduleItem3.classList.add('time');
+                        
+                    
+                    changeScheduleItem4.value = scheduleItem4.innerText;
+                    scheduleItem4.parentNode.replaceChild(changeScheduleItem4,scheduleItem4);
+                    changeScheduleItem4.classList.add('content');
+                    
+
+                    saveButton.classList.remove('hide');
+                    cancelButton.classList.remove('hide');
+                    
+                    modifyButton.classList.add('hide');
+                    deleteButton.classList.add('hide');
+                    
+                    saveButton.onclick = function(){
+                        modifyAction(idx,changeScheduleItem,changeScheduleItem3,changeScheduleItem4);
+                    }
+                    cancelButton.onclick = (e)=>{return false};
+                };
+            }
         }
     </script>
 </body>

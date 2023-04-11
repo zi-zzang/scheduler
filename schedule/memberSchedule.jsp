@@ -18,7 +18,7 @@ Class.forName("com.mysql.jdbc.Driver");
 
 Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/scheduler","stageus","1234") ;
 
-String sql = "SELECT MONTH(date) AS MONTH, DAY(date) AS DAY, LPAD(HOUR(time), 2, '0') AS HOUR, LPAD(MINUTE(time), 2, '0') AS MINUTE, content, schedule_idx FROM schedule WHERE user_idx = ? ORDER BY month, day, hour, minute";
+String sql = "SELECT MONTH(date) AS MONTH, DAY(date) AS DAY, LPAD(HOUR(time), 2, '0') AS HOUR, LPAD(MINUTE(time), 2, '0') AS MINUTE, content, schedule_idx =? FROM schedule ORDER BY month, day, hour, minute";
 
 PreparedStatement query = connect.prepareStatement(sql);
 
@@ -128,7 +128,7 @@ int choosenDay = lastDayOfMonth.getDayOfMonth(); // lastDayOfMonth 값의 날짜
                 <form action="addScheduleAction.jsp">
                     <input type="date" name="date" value="<%=today%>" class="date-time">
                     <input type="time" name="time" value="11:00" class="date-time">
-                    <input type="text" name="content" placeholder="일정을 입력해 주세요." class="text-input" maxlength="20">
+                    <input type="text" name="content" placeholder="일정을 입력해 주세요." class="text-input">
                     <input type="submit" class="buttons" value="추가">
                     <input type="button"onclick="closeModal()" class="buttons" value="닫기">
                 </form>
@@ -200,7 +200,7 @@ int choosenDay = lastDayOfMonth.getDayOfMonth(); // lastDayOfMonth 값의 날짜
         }
         }
 
-        if(document.getElementById('position').textContent == '팀장'){
+        if(document.getElementById('position').textContent == '팀장' || document.getElementById('position').textContent == '관리자'){
         document.querySelector('.team').style.display = 'block';
         }else{
         document.querySelector('.team').style.display = 'none';

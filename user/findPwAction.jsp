@@ -50,17 +50,12 @@ if(result.next()){
             <div class="box">
                 <main>
                     <h1 class="title">회원님의 비밀번호는 <%=pw%>입니다.</h1>
-                    <input type="button" value="아이디 찾기" class="input-box buttons" onclick="findId()"/>
                     <input type="button" value="로그인" class="input-box buttons" onclick="login()"/>
                 </main>
             </div>
         </div>
     </body>
     <script>
-        function findId(){
-            window.opener.location.href = '/scheduler/user/findId.html'; 
-            window.close();
-        }
         function login(){
             window.opener.location.href = '/scheduler/user/login.html';
             window.close();

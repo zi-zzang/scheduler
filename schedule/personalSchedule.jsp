@@ -19,8 +19,10 @@ Class.forName("com.mysql.jdbc.Driver");
 Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/scheduler","stageus","1234") ;
 
 String sql = "SELECT MONTH(date) AS MONTH, DAY(date) AS DAY, LPAD(HOUR(time), 2, '0') AS HOUR, LPAD(MINUTE(time), 2, '0') AS MINUTE, content, schedule_idx FROM schedule WHERE user_idx = ? ORDER BY month, day, hour, minute";
+String sql2 = "SELECT * FROM user";
 
 PreparedStatement query = connect.prepareStatement(sql);
+PreparedStatement query2 = connect.prepareStatement(sql2);
 
 //loginAction에서 저장된 session (user 정보)
 String idx =(String)session.getAttribute("idx");
@@ -31,9 +33,11 @@ String position = (String)session.getAttribute("position");
 query.setString(1,idx);
 
 ResultSet result = query.executeQuery();
+ResultSet result2 = query2.executeQuery();
 
 //2차원 array 리스트
 ArrayList <ArrayList<String>> array = new ArrayList<ArrayList<String>>();
+ArrayList <ArrayList<String>> info = new ArrayList<ArrayList<String>>();
 //new = 메모리에 공간을 할당해달라는 의미(옛날언어에만 있음)
 while(result.next()){
     ArrayList <String> tmp = new ArrayList<String>();
@@ -46,6 +50,14 @@ while(result.next()){
     array.add(tmp);
 };
 
+while(result2.next()){
+    ArrayList <String> tmp2 = new ArrayList<String>();
+        tmp2.add("\""+result2.getString("user_idx")+"\"");
+        tmp2.add("\""+result2.getString("name")+"\"");
+        tmp2.add("\""+result2.getString("position")+"\"");
+    
+        info.add(tmp2);
+}
 
 LocalDate today = LocalDate.now();
 LocalDate lastDayOfMonth = today.withDayOfMonth(today.lengthOfMonth()); // ex) 설정 달 5월일 경우 2023-05-31 출력
@@ -53,6 +65,11 @@ int choosenMonth = lastDayOfMonth.getMonthValue(); // lastDayOfMonth 값의 달
 int choosenDay = lastDayOfMonth.getDayOfMonth(); // lastDayOfMonth 값의 날짜
 
 
+
+
+
+if(idx != null){
+    
 %>
 <!DOCTYPE html>
 <html lang="kr">
@@ -102,15 +119,10 @@ int choosenDay = lastDayOfMonth.getDayOfMonth(); // lastDayOfMonth 값의 날짜
             <div class="menu-content">
                 <p class="greeting-message"><%=name%> <span id="position"><%=position%></span>님, 환영합니다 :)</p>
                 <div class="all-schedules">
-                    <p class="schedule"><a href="#">나의 일정</a></p>
+                    <p class="schedule"><a href="personalSchedule.jsp">나의 일정</a></p>
                     <p class="schedule team"><a href="#" onclick="menuOpen()">팀원 일정</a></p>
                     <div class="member">
                         <span class="line"></span>
-                        <li class="member-schedule"><a href="#">김지현 팀원</a></li>
-                        <li class="member-schedule"><a href="#">이지현 팀원</a></li>
-                        <li class="member-schedule"><a href="#">백지현 팀원</a></li>
-                        <li class="member-schedule"><a href="#">전지현 팀원</a></li>
-                        <li class="member-schedule"><a href="#">유지현 팀원</a></li>
                     </div>
                 </div>
                 <a href="/scheduler/user/logout.jsp" class="buttons">로그아웃</a>
@@ -166,6 +178,7 @@ int choosenDay = lastDayOfMonth.getDayOfMonth(); // lastDayOfMonth 값의 날짜
         var choosenMonth = Number('<%=choosenMonth%>');
         //데이터 array
         var data = <%=array%>;
+        var info = <%=info%>;
         let i;
         // let scheduleIdx;
         var count = 0;
@@ -200,10 +213,11 @@ int choosenDay = lastDayOfMonth.getDayOfMonth(); // lastDayOfMonth 값의 날짜
         }
         }
 
-        if(document.getElementById('position').textContent == '팀장'){
+        if(document.getElementById('position').textContent == '팀장' ||document.getElementById('position').textContent == '관리자'){
         document.querySelector('.team').style.display = 'block';
         }else{
         document.querySelector('.team').style.display = 'none';
+        document.querySelector('.member').style.display = 'none';
         }
         
         var currentDate = '';
@@ -375,7 +389,24 @@ int choosenDay = lastDayOfMonth.getDayOfMonth(); // lastDayOfMonth 값의 날짜
                 };
             }
         }
+        
+        for(let j = 0; j < info.length; j++){       
+            var memberSchedule = document.createElement('li');
+            var aTag = document.createElement('a');     
+            // console.log(info);
+            document.querySelector('.member').appendChild(memberSchedule);
+            memberSchedule.appendChild(aTag);
+
+            memberSchedule.classList.add('member-schedule');
+            aTag.setAttribute('href','memberSchedule.jsp?memberIdx='+info[j][0]+'&memberName='+info[j][1]+'&memberPosition='+info[j][2]);
+            aTag.innerHTML = info[j][1]+'\n'+info[j][2];
+            }
     </script>
 </body>
 </html>
-
+<%
+}else{
+    out.println("<script>alert('로그인 후 이용해 주세요.')</script>");
+    out.println("<script>window.location = '/scheduler/user/login.html'</script>"); 
+}
+%>

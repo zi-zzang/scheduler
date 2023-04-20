@@ -124,11 +124,3 @@ a{
 /* 공통 css */
 
 
-.duplicate{
-    font-size: 36px;
-    color: #1877f2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height : 100vh;
-}

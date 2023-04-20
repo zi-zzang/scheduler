@@ -41,3 +41,26 @@
 #submit{
     margin-top:20px;
 }
+
+.duplicateBox{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.duplicate{
+    font-size: 36px;
+    color: #1877f2;
+}
+
+.boxes{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 14px;
+}

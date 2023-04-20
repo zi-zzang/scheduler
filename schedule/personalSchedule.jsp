@@ -185,12 +185,14 @@ if(idx != null){
         var data = <%=array%>;
         var contents = <%=contents%>;
         let i;
-        // let scheduleIdx;
         var count = 0;
         // 현재 월 값
         var current;
-        
+
         function createSchedule(){
+            if(data.length==0){
+                var scheduleDate = document.querySelector('.month').innerHTML = year + '년 ' + (month+1)+ '월';
+            }
             //일정 목록 생성
             for (i = 0; i < data.length; i++) {
                 // current = (month+1);

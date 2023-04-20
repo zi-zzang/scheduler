@@ -63,20 +63,31 @@ Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/schedul
 
     function idOpener(){
         var uid = document.getElementById('id').value;
+        if(uid == ''){
+            alert('사용할 아이디를 입력해 주세요.')
+        }else{
         openWin = window.open('/scheduler/user/duplicateIdAction.jsp?id='+uid, 'duplicate',"width=555,height=405,top=250,left=700" );
+        }
     }
 
     function duplicateId(duplicate){
         var disableId = document.getElementById('disable-id')
         var ableId = document.getElementById('able-id')
+        var uid = document.getElementById('id').value;
+        var pattern = /^[a-z0-9_-]{5,20}$/;
         if(duplicate){
             disableId.innerText = "이미 사용중인 아이디입니다."
             disableId.style.display = 'block';
             ableId.style.display = 'none';
-        }else{
+        }
+        else{
             ableId.innerText = "사용 가능한 아이디입니다."
             ableId.style.display = 'block';
             disableId.style.display = 'none';
+            if(!pattern.test(uid)){
+                ableId.style.display = 'none';
+                disableId.style.display = 'block';
+            }
         }
     }   
 
@@ -132,6 +143,11 @@ Connection connect = DriverManager.getConnection("jdbc:mysql://localhost/schedul
     
 
     function joinCheck(){
+        var disableId = document.getElementById('disable-id')
+        if(disableId.innerText == "이미 사용중인 아이디입니다."){
+            alert('이미 사용중인 아이디입니다.');
+            return false;
+        }
         if(!document.joinform.id.value){
             alert("아이디가 입력 되지 않았습니다.");
             return false;

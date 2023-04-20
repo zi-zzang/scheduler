@@ -90,28 +90,28 @@ if(idx != null){
 </head>
 <body>
     <div id="wrap">
-        <!-- 내비게이션 메뉴 -->
-        <div class="navbar">
-            <span class="material-symbols-rounded menu" onclick="navigationMenu()">
-                menu
+    </div>
+    <!-- 내비게이션 메뉴 -->
+    <div class="navbar">
+        <span class="material-symbols-rounded menu" onclick="navigationMenu()">
+            menu
+        </span>
+        <div class="month-box">
+            <span class="material-symbols-rounded arrow-left" onclick="prevMonth()">
+                arrow_back_ios_new
             </span>
-            <div class="month-box">
-                <span class="material-symbols-rounded arrow-left" onclick="prevMonth()">
-                    arrow_back_ios_new
-                </span>
-                <!-- <span class="choosen-month hide"><%=choosenMonth%></span>
-                <span class="choosen-day hide"><%=choosenDay%></span> -->
-                <span class="month"><%=choosenMonth%>월</span>
-                <span class="material-symbols-rounded arrow-right">
-                    arrow_forward_ios
-                </span>
-            </div>
-            <span class="material-symbols-rounded add" onclick="addSchedule()">
-                
+            <!-- <span class="choosen-month hide"><%=choosenMonth%></span>
+            <span class="choosen-day hide"><%=choosenDay%></span> -->
+            <span class="month"></span>
+            <span class="material-symbols-rounded arrow-right" onclick="nextMonth()">
+                arrow_forward_ios
             </span>
         </div>
-        <!-- 내비게이션 메뉴 -->
+        <span class="material-symbols-rounded add" onclick="addSchedule()">
+            
+        </span>
     </div>
+    <!-- 내비게이션 메뉴 -->
 
         <!-- 데이터베이스에 있는 일정 불러오기 -->
 
@@ -144,7 +144,7 @@ if(idx != null){
             <div class="modal-content">
                 <form action="addScheduleAction.jsp">
                     <input type="date" name="date" value="<%=today%>" class="date-time">
-                    <input type="time" name="time" value="11:00" class="date-time">
+                    <input type="time" name="time" value="12:00" class="date-time">
                     <input type="text" name="content" placeholder="일정을 입력해 주세요." class="text-input">
                     <input type="submit" class="buttons" value="추가">
                     <input type="button"onclick="closeModal()" class="buttons" value="닫기">
@@ -177,123 +177,121 @@ if(idx != null){
         </div>
     </div>
     <!-- 삭제 팝업 -->
-
+    <script src="/scheduler/script/schedule.js"></script>
     <script>
-        var choosenDay = Number('<%=choosenDay%>');
-        var choosenMonth = Number('<%=choosenMonth%>');
+        var today = new Date();
+        var year = today.getFullYear();
+        var month = today.getMonth();
+        var currentDate = '';
+        var currentBox = null;
         //데이터 array
         var data = <%=array%>;
         var info = <%=info%>;
-        console.log(data);
-        console.log(info);
-
         let i;
-        // let scheduleIdx;
         var count = 0;
-
         document.querySelector('.team').style.display = 'block';
-        function closeModal(){
-            var modal = document.getElementsByClassName("black-bg");
-            //모든 black-bg
-            for(var i = 0; i <modal.length; i++){
-                modal[i].style.visibility = 'hidden';
+
+        function createSchedule(){
+            if(data.length==0){
+                var scheduleDate = document.querySelector('.month').innerHTML = year + '년 ' + (month+1)+ '월';
+            }
+            for (i = 0; i < data.length; i++) {
+                var scheduleDate = document.querySelector('.month').innerHTML = year + '년 ' + (month+1)+ '월';
+                var idx = data[i][5]; 
+                currentDate = data[i][0] + "월 " + data[i][1] + "일";
+                if((month+1) == data[i][0]){
+                    if (!currentBox || currentBox.querySelector('.date').innerHTML !== currentDate) {
+                        var date = document.createElement('p');
+                        date.classList.add('date');
+                        date.innerHTML = currentDate;
+                        currentBox = document.createElement('div');
+                        document.getElementById('wrap').appendChild(currentBox);
+                        currentBox.classList.add('box');
+                        currentBox.appendChild(date);
+                    }
+
+                    //날짜가 겹칠 경우
+                    var scheduleBox = document.createElement('form');
+                    var scheduleContent = document.createElement('div');
+                    var scheduleContent2 = document.createElement('div');
+                    var scheduleItem = document.createElement('p');
+                    var scheduleItem2 = document.createElement('p');
+                    var scheduleItem3 = document.createElement('p');
+                    var scheduleItem4 = document.createElement('p');
+                    var line = document.createElement('span');
+
+
+                    currentBox.appendChild(scheduleBox);
+                    scheduleBox.appendChild(scheduleContent);
+                    scheduleBox.appendChild(scheduleContent2);
+                    scheduleContent.appendChild(scheduleItem);
+                    scheduleContent.appendChild(scheduleItem2);
+                    scheduleContent.appendChild(scheduleItem3);
+                    scheduleContent.appendChild(scheduleItem4);
+
+                    scheduleContent2.id = idx;
+                    scheduleContent.classList.add('schedule-content');
+                    scheduleBox.classList.add('schedule-box');
+                    scheduleContent2.classList.add('schedule-content2');
+                    scheduleItem.classList.add('schedule-item');
+                    scheduleItem2.classList.add('schedule-item');
+                    scheduleItem3.classList.add('schedule-item');
+                    scheduleItem4.classList.add('schedule-item2');
+
+                    line.classList.add('line');
+                    scheduleItem.innerHTML = data[i][2];
+                    scheduleItem2.innerHTML = ":";
+                    scheduleItem3.innerHTML = data[i][3];
+                    scheduleItem4.innerHTML = data[i][4];
+                    currentBox.appendChild(line);
+                }
             }
         }
-        function addSchedule(){
-        document.querySelector("#add-schedule-modal").style.visibility = 'visible';
-        }
-        
-
-        function navigationMenu(){
-        document.querySelector(".menu-bar").style.left = 0;
-        document.querySelector("#menu-bar").style.visibility='visible';
-        }
-
-        function closeNavigationMenu(){
-        document.querySelector(".menu-bar").style.left = '-61%';
-        document.querySelector("#menu-bar").style.visibility='hidden';
-        }
-
-        function menuOpen(){
-        count++;
-        document.querySelector('.member').style.display = 'block';
-        if(count%2==0){
-        document.querySelector('.member').style.display = 'none';
-        }
+        createSchedule();
+        //이전월
+        function prevMonth() {
+            month--;
+            if (month < 0) {
+                month = 11;
+                year--;
+            }
+            document.querySelector('.month').innerHTML = year + '년 ' + (month+1) + '월';
+            var wrap = document.getElementById('wrap');
+            while(wrap.firstChild){
+                wrap.removeChild(wrap.firstChild);
+            }
+            createSchedule();
         }
 
-
-        
-        var currentDate = '';
-        var currentBox = null;
-
-        for (i = 0; i < data.length; i++) {
-            var idx = data[i][5];
-            console.log(idx + "for문 idx");
-            currentDate = data[i][0] + "월" + data[i][1] + "일";
-            if (!currentBox || currentBox.querySelector('.date').innerHTML !== currentDate) {
-                //만약 box의 값이 없거나 혹은 박스의 데이터 값이 현재 데이터 값과 다르다면
-                var date = document.createElement('p');
-                date.classList.add('date');
-                date.innerHTML = currentDate;
-                currentBox = document.createElement('div');
-                document.getElementById('wrap').appendChild(currentBox);
-                currentBox.classList.add('box');
-                currentBox.appendChild(date);
+        //다음월
+        function nextMonth() {
+            month++;
+            if (month > 11) {
+                month = 0;
+                year++;
             }
 
-            //날짜가 겹칠 경우
-            var scheduleBox = document.createElement('form');
-            var scheduleContent = document.createElement('div');
-            var scheduleContent2 = document.createElement('div');
-            var scheduleItem = document.createElement('p');
-            var scheduleItem2 = document.createElement('p');
-            var scheduleItem3 = document.createElement('p');
-            var scheduleItem4 = document.createElement('p');
-            var line = document.createElement('span');
+            document.querySelector('.month').innerHTML = year + '년 ' + (month + 1) + '월';
+            var wrap = document.getElementById('wrap');
+            console.log(wrap.firstChild)
+            while(wrap.firstChild){
+                wrap.removeChild(wrap.firstChild);
+            }
+            createSchedule();
+        }    
 
-
-            currentBox.appendChild(scheduleBox);
-            scheduleBox.appendChild(scheduleContent);
-            scheduleBox.appendChild(scheduleContent2);
-            scheduleContent.appendChild(scheduleItem);
-            scheduleContent.appendChild(scheduleItem2);
-            scheduleContent.appendChild(scheduleItem3);
-            scheduleContent.appendChild(scheduleItem4);
-
-            scheduleContent2.id = idx;
-            scheduleContent.classList.add('schedule-content');
-            scheduleBox.classList.add('schedule-box');
-            scheduleContent2.classList.add('schedule-content2');
-            scheduleItem.classList.add('schedule-item');
-            scheduleItem2.classList.add('schedule-item');
-            scheduleItem3.classList.add('schedule-item');
-            scheduleItem4.classList.add('schedule-item2');
-
-            line.classList.add('line');
-            scheduleItem.innerHTML = data[i][2];
-            scheduleItem2.innerHTML = ":";
-            scheduleItem3.innerHTML = data[i][3];
-            scheduleItem4.innerHTML = data[i][4];
-            currentBox.appendChild(line);
-
-
-
-            
-        }
-        
         for(let j = 0; j < info.length; j++){
             // console.log(<%=memberIdx%>+<%=memberName%>+<%=memberPosition%>);
             var memberSchedule = document.createElement('li');
             var aTag = document.createElement('a');     
-            console.log(info);
+            // console.log(info);
             document.querySelector('.member').appendChild(memberSchedule);
             memberSchedule.appendChild(aTag);
 
             memberSchedule.classList.add('member-schedule');
             aTag.setAttribute('href','memberSchedule.jsp?memberIdx='+info[j][0]+'&memberName='+info[j][1]+'&memberPosition='+info[j][2]);
             aTag.innerHTML = info[j][1]+'\n'+info[j][2];
-            }
+        }
     </script>
 </body>
 </html>
